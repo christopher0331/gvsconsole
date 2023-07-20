@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { DataContext } from './Context.js'; // adjust this path to your context.js file location
 // import './styles/AboutUs.css';
-
+import AWS from 'aws-sdk';
 const Customers = () => {
     
       const [firstName, setFirstName] = useState('');

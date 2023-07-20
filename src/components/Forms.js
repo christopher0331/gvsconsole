@@ -3,6 +3,7 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import WarrantyData from './WarrantyData.js';
 import "./styles/Forms.css";
 import { DataProvider } from './Context.js';
+import AWS from 'aws-sdk';
 
 const SortableItem = SortableElement(({ value }) => <div className="quadrant">{value}</div>);
 

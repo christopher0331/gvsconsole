@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { DataContext } from './Context.js';
-
+import AWS from 'aws-sdk';
 const MarketingFormData = () => {
 
   const { state, deleteMarketingItemFromContext, editItem } = useContext(DataContext);

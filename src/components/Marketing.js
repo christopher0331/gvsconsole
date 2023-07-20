@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Chart } from 'chart.js';
-
+import AWS from 'aws-sdk';
 Chart.register(
   require('chart.js').elements.ArcElement,
   require('chart.js').controllers.PieController,

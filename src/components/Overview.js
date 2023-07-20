@@ -8,6 +8,7 @@ import WarrantyData from './WarrantyData.js';
 import Projects from './Projects.js';
 import MarketingFormData from './MarketingFormData.js';
 import { DataProvider } from './Context.js'; // import the DataProvider
+import AWS from 'aws-sdk';
 
 const SortableItem = SortableElement(({ value }) => 
   <div style={{height: '100%', width: '100%'}} className="item">
