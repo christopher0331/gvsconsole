@@ -1,63 +1,71 @@
-import React, { useContext } from 'react';
-import { DataContext } from './Context.js';
-import AWS from 'aws-sdk';
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebaseConfig';  // Update this import path accordingly
 
 const WarrantyData = () => {
-    const { state, loading, deleteItemFromContext, editItem } = useContext(DataContext);
-    const warrantyData = state.warrantyData;
 
-    // Function to handle delete
-    const handleDelete = async (item) => {
-        if (window.confirm("Are you sure you want to delete this record?")) {
+        const [requests, setRequests] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState(null);
+    
+        const fetchData = async () => {
             try {
-                await deleteItemFromContext(item);
-            } catch (error) {
-                console.error('Error deleting item:', error);
+                const requestCollection = collection(db, "warrantyForms");
+                const requestSnapshot = await getDocs(requestCollection);
+                const requestData = requestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setRequests(requestData);
+                setLoading(false);
+            } catch (err) {
+                setError(err);
+                setLoading(false);
             }
-        }
-    };
-
-    // Function to handle update
-    const handleUpdate = (item) => {
-        editItem(item);
-    };
-
-    if (!warrantyData || warrantyData.length === 0) {
-        return <div>Loading...</div>;
+        };
+    
+        useEffect(() => {
+            fetchData();
+        }, []);
+    
+        if (loading) return <p>Loading...</p>;
+        if (error) return <p>Error: {error.message}</p>;
+    
+        return (
+            <div className="projOverviewDiv">
+                {requests.length === 0 ? (
+                    <p>No requests found.</p>
+                ) : (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip Code</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {requests.map((request) => (
+                                <tr key={request.id}>
+                                    <td>{request.firstName}</td>
+                                    <td>{request.lastName}</td>
+                                    <td>{request.email}</td>
+                                    <td>{request.phone}</td>
+                                    <td>{request.city}</td>
+                                    <td>{request.state}</td>
+                                    <td>{request.zipCode}</td>
+                                    <td>{request.description}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+        );
+        
     }
-
-    return (
-        <div>
-            <h1>Warranty Data</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Product Name</th>
-                        <th>Product Serial Number</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {warrantyData.map((item) => (
-                        <tr key={item.email}>
-                            <td>{item.firstName}</td>
-                            <td>{item.lastName}</td>
-                            <td>{item.email}</td>
-                            <td>{item.productName}</td>
-                            <td>{item.productSerialNumber}</td>
-                            <td>
-                                <button onClick={() => handleUpdate(item)}>Update</button>
-                                <button onClick={() => handleDelete(item)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
-};
-
-export default WarrantyData;
+    
+    export default WarrantyData;
+    

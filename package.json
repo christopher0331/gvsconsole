@@ -10,6 +10,7 @@
     "aws-sdk": "^2.1418.0",
     "axios": "^1.4.0",
     "chart.js": "^3.5.1",
+    "firebase": "^10.4.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-chartjs-2": "^3.0.4",
