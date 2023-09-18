@@ -4,6 +4,7 @@ import WarrantyData from './WarrantyData.js';
 import "./styles/Forms.css";
 import { DataProvider } from './Context.js';
 import AWS from 'aws-sdk';
+import MarketingForm from './MarketingForm.js';
 
 const SortableItem = SortableElement(({ value }) => <div className="quadrant">{value}</div>);
 
@@ -29,7 +30,7 @@ function move(arr, oldIndex, newIndex) {
   }
 
 function Forms() {
-  const [items, setItems] = useState([<WarrantyData />, "Quadrant 2", "Quadrant 3", "Quadrant 4"]);
+  const [items, setItems] = useState([<WarrantyData />, <MarketingForm />, "Quadrant 3", "Quadrant 4"]);
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     setItems(move(items, oldIndex, newIndex));

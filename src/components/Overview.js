@@ -3,8 +3,10 @@ import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import "./styles/Overview.css";
 import Customers from './Customers.js';
 import Financial from './Financial.js';
-import Marketing from './Marketing.js';
+import MarketingOverview from './MarketingOverview.js';
 import WarrantyData from './WarrantyData.js';
+import FormsAndFormDataOverview  from "./FormsAndFormsDataOverview";
+import WarrantyOverview from './WarrantyOverview';
 import Projects from './Projects.js';
 import MarketingFormData from './MarketingFormData.js';
 import { DataProvider } from './Context.js'; // import the DataProvider
@@ -58,13 +60,13 @@ function move(arr, oldIndex, newIndex) {
 }
 
 function Overview() {
-    const componentOrder = ["Customers", "Financial", "Marketing", "WarrantyData", "Projects", "MarketingFormData"];
+    const componentOrder = ["Customers", "Financial", "MarketingOverview", "WarrantyOverview", "Projects", "MarketingFormData"];
     const components = {
       Customers: <Customers />, 
       Financial: <Financial />,
-      Marketing: <Marketing />, 
+      Marketing: <MarketingOverview />, 
       Projects: <Projects />,
-      WarrantyData: <WarrantyData />,
+      WarrantyOverview: <WarrantyOverview />,
       MarketingFormData: <MarketingFormData />
     };
   

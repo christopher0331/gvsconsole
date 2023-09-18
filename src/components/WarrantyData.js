@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';  // Update this import path accordingly
+import './styles/WarrantyData.css';
 
 const WarrantyData = () => {
 
@@ -35,6 +36,7 @@ const WarrantyData = () => {
                 ) : (
                     <table>
                         <thead>
+                            Warranty Data
                             <tr>
                                 <th>First Name</th>
                                 <th>Last Name</th>
