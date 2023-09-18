@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './styles/Header.css';
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="header">
-      <div className="logo">Our Logo Here</div>
-      <nav className="nav">
+      <div className="iconAndHamburger">
+        <div className="logo">Our Logo Here</div>
+        <div className="menu-icon" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </div>
+      </div>
+      <nav className={`nav ${menuOpen ? 'open' : ''}`}>
         <ul>
           <Link to="/overview"><li>Overview</li></Link>
           <Link to="/customers"><li>Customers</li></Link>

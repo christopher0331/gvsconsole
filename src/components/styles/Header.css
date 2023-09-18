@@ -1,34 +1,89 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+  height: 100vh; 
+  flex-direction: column;
+  position: relative; /* Add this line */
+}
+
+.nav {
+  flex-grow: 1;
+  position: absolute; /* Add this line */
+  top: 100%; /* Add this line */
+  left: 0; /* Add this line */
+  right: 0; /* Add this line */
+  background-color: #f8f9fa; /* Add a background to the dropdown */
+}
+
+
+.iconAndHamburger {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 200px;
+}
+
+.nav ul {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.nav li {
+  text-align: center;
+}
+
+.nav a {
+  text-decoration: none;
+  color: black;
+}
+
+.menu-icon {
+  display: none;
+  cursor: pointer;
+  margin-left: 20px; /* creates space between logo and menu icon */
+}
+
+/* Media query */
+@media (max-width: 768px) {
+  .header{
+    height: 1.5em;
   }
-  
-  .logo {
-    width: 200px; /* adjust as needed for your logo */
+
+  .iconAndHamburger {
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    justify-content: center;
   }
-  
+
+  .menu-icon {
+    display: block;
+    margin-left: 0; /* remove space for stacked layout */
+  }
+
   .nav {
-    flex-grow: 1;
-  }
-  
-  .nav ul {
-    display: flex;
-    justify-content: space-around;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    display: none;
     width: 100%;
-  }
-  
-  .nav li {
     text-align: center;
   }
-  
-  .nav a {
-    text-decoration: none;
-    color: black;
+
+  .nav.open {
+    display: block;
   }
-  
+
+  .nav ul {
+    flex-direction: column;
+  }
+
+  .nav li {
+    padding: 10px 0;
+  }
+}
