@@ -1,25 +1,33 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-  }
-  
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 97vw;
+  gap: 10px;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.item {
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  width: 98vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
   .list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    height: 100vh;
-    width: 100vw;
-    gap: 10px;
-    box-sizing: border-box;
-    padding: 20px;
+      grid-template-columns: 1fr; /* This will make it a single column layout */
+      grid-template-rows: repeat(6, 1fr); /* Adjust this based on the number of components you have */
+      padding: 10px; /* reduce padding for mobile */
   }
-  
-  .item {
-    background-color: #f4f4f4;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+}
