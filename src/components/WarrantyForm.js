@@ -1,92 +1,151 @@
-import React, { useContext, useState } from 'react';
-import { DataContext } from './Context.js'; // adjust this path to your context.js file location
+import React, { useState } from 'react';
+import { db } from '../firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 import './styles/WarrantyForm.css';
-import AWS from 'aws-sdk';
-
 const WarrantyForm = () => {
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [productName, setProductName] = useState('');
-  const [productSerialNumber, setProductSerialNumber] = useState('');
-  const { addItemWarranty } = useContext(DataContext);
+  const [phone, setPhone] = useState('');
+  const [city, setCity] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [state, setState] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newSetupWarranty = {
+    const newRequest = {
       firstName,
       lastName,
       email,
-      productName,
-      productSerialNumber,
+      phone,
+      city,
+      zipCode,
+      state,
+      description,
     };
 
-    addItemWarranty(newSetupWarranty);
-
     try {
-      
-      // Update the warrantyData in the context
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setProductName('');
-      setProductSerialNumber('');
-
+      const docRef = await addDoc(collection(db, "warrantyForms"), newRequest);
+      console.log("Document written with ID: ", docRef.id);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error adding document: ", error);
     }
-  };
 
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPhone('');
+    setCity('');
+    setZipCode('');
+    setState('');
+    setDescription('');
+  };
   return (
-    <div className='warrantyFormDiv'>
-      <form onSubmit={handleSubmit}>
-        <h1>Warranty Form</h1>
-        <label>
-          First Name:
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </label>
-        <label>
-          Last Name:
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </label>
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label>
-          Product Name:
-          <input
-            type="text"
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
-          />
-        </label>
-        <label>
-          Product Serial Number:
-          <input
-            type="text"
-            value={productSerialNumber}
-            onChange={(e) => setProductSerialNumber(e.target.value)}
-          />
-        </label>
-        <button type="submit">Submit</button>
-      </form>
+    <div className="projOverviewDiv">
+        <form onSubmit={handleSubmit} className="formContainer">
+            <h1 className="formTitle">How can we help?</h1>
+            <p className="formParagraph">Fields marked with an * are required</p>
+            
+            <div className="formField">
+                <label className="formLabel">
+                    First Name*:
+                    <input className="formInput"
+                        type="text"
+                        required
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div className="formField">
+                <label className="formLabel">
+                    Last Name*:
+                    <input className="formInput"
+                        type="text"
+                        required
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div className="formField">
+                <label className="formLabel">
+                    Email*:
+                    <input className="formInput"
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div className="formField">
+                <label className="formLabel">
+                    Phone:
+                    <input className="formInput"
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div className="formField">
+                <label className="formLabel">
+                    City*:
+                    <input className="formInput"
+                        type="text"
+                        required
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div className="formField">
+                <label className="formLabel">
+                    Zip Code*:
+                    <input className="formInput"
+                        type="text"
+                        required
+                        value={zipCode}
+                        onChange={(e) => setZipCode(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div className="formField">
+                <label className="formLabel">
+                    State/Region*:
+                    <input className="formInput"
+                        type="text"
+                        required
+                        value={state}
+                        onChange={(e) => setState(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <div className="formField">
+                <label className="formLabel">
+                    Tell Us About Your Request:
+                    <textarea className="formInput"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </label>
+            </div>
+
+            <button type="submit" className="formButton">Submit Request</button>
+        </form>
     </div>
-  );
+);
+
 };
 
 export default WarrantyForm;
