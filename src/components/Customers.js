@@ -1,11 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { DataContext } from './Context.js'; // adjust this path to your context.js file location
+// Customers.js
+
+import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebaseConfig';  // Adjust the path as needed
+import { db } from '../firebaseConfig';
 import CustomerList from '../components/CustomerList';
 import GeneralStatistics from '../components/GeneralStatistics';
-// import './styles/AboutUs.css';
-import SampleCustomers from './DummyData.js';
 
 export const getCustomers = async () => {
   const customersCol = collection(db, 'customers');
@@ -14,32 +13,31 @@ export const getCustomers = async () => {
   return customerList;
 };
 
-console.log(SampleCustomers)
 function Customers() {
-  // const [customers, setCustomers] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [activeTab, setActiveTab] = useState('GeneralStatistics');
-  const customers = SampleCustomers;
 
-  // useEffect(() => {
-  //   const fetchCustomers = async () => {
-  //     const data = await getCustomers();
-  //     setCustomers(data);
-  //   };
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      const data = await getCustomers();
+      setCustomers(data);
+    };
 
-  //   fetchCustomers();
-  // }, []);
+    fetchCustomers();
+  }, []);
 
   return (
-    <div>
-      <div>
-        <button onClick={() => setActiveTab('ContactInfo')}>Customer List</button>
-        <button onClick={() => setActiveTab('GeneralStatistics')}>General Statistics</button>
+    <div className="customerOverview">
+      <div className="tabMenu">
+        <button onClick={() => setActiveTab('ContactInfo')} className={activeTab === 'ContactInfo' ? 'active' : ''}>Customer List</button>
+        <button onClick={() => setActiveTab('GeneralStatistics')} className={activeTab === 'GeneralStatistics' ? 'active' : ''}>General Statistics</button>
       </div>
-      {activeTab === 'ContactInfo' && <CustomerList customers={customers} />}
-      {activeTab === 'GeneralStatistics' && <GeneralStatistics customers={customers} />}
+      <div className="tabContent">
+        {activeTab === 'ContactInfo' && <CustomerList customers={customers} />}
+        {activeTab === 'GeneralStatistics' && <GeneralStatistics customers={customers}/>}
+      </div>
     </div>
   );
 }
 
 export default Customers;
-

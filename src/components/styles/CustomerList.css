@@ -31,28 +31,45 @@ th {
 tr:hover {
     background-color: #f5f5f5;
 }
+.tabMenu {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #e2e2e2;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
 
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    background-color: #333;
-    color: #fff;
+.tabMenu button {
+    padding: 8px 20px;
+    border: 1px solid #d0d0d0; /* Added a subtle border */
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: #f7f7f7; /* Slightly darker background color for non-active tabs */
+    color: #333;               /* Darker text color for non-active tabs */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Added color transition */
+    border-radius: 4px;
+    outline: none;             /* Remove the focus outline for aesthetics */
 }
 
-button:hover {
-    background-color: #555;
+.tabMenu button:hover {
+    background-color: #e2e2e2; /* Darker hover effect */
 }
 
-button:active {
-    background-color: #111;
+.tabMenu .active {
+    background-color: #007BFF;
+    color: #ffffff;
+    border: 1px solid #007BFF; /* Active tab border color same as background */
+}
+
+.tabContent {
+    padding: 20px;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px;
 }
 
 /* Paginate styles */
 .pagination {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin-top: 20px;
 }

@@ -42,6 +42,7 @@ const WarrantyData = () => {
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
+                                <th>Street</th>
                                 <th>City</th>
                                 <th>State</th>
                                 <th>Zip Code</th>
@@ -55,6 +56,7 @@ const WarrantyData = () => {
                                     <td>{request.lastName}</td>
                                     <td>{request.email}</td>
                                     <td>{request.phone}</td>
+                                    <td>{request.street}</td>
                                     <td>{request.city}</td>
                                     <td>{request.state}</td>
                                     <td>{request.zipCode}</td>

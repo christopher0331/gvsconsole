@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import FirebaseDataUpload from './FirebaseDataUpload.js';
+
 import './styles/Header.css';
 
 const Header = () => {
@@ -15,6 +17,7 @@ const Header = () => {
       </div>
       <nav className={`nav ${menuOpen ? 'open' : ''}`}>
         <ul>
+          {/* <FirebaseDataUpload /> */}
           <Link to="/overview"><li>Overview</li></Link>
           <Link to="/customers"><li>Customers</li></Link>
           <Link to="/financial"><li>Financial</li></Link>

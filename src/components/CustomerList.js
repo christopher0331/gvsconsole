@@ -1,19 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs, query } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
-function CustomerList({ customers }) {
+function CustomerList() {
+    const [customers, setCustomers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const customersPerPage = 50;
+    const customersPerPage = 10;
 
-    // Get current customers
+    useEffect(() => {
+        const fetchData = async () => {
+            const customersCol = collection(db, 'customers');
+            const customerSnapshot = await getDocs(query(customersCol));
+            const customerList = customerSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+            setCustomers(customerList);
+        };
+
+        fetchData();
+    }, []);
+
     const indexOfLastCustomer = currentPage * customersPerPage;
     const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
     const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer);
 
-    // Change page
-    const paginate = pageNumber => setCurrentPage(pageNumber);
+    // Pagination functions
+    const nextPage = () => {
+        if (currentPage < Math.ceil(customers.length / customersPerPage)) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
+    };
 
     return (
         <div>
+            {/* Display total number of customers and count per page */}
+            <div>
+                <p>Total Customers: {customers.length}</p>
+                <p>Displaying: {Math.min(customers.length, customersPerPage)} customers per page</p>
+            </div>
+
             <table>
                 <thead>
                     <tr>
@@ -32,30 +61,27 @@ function CustomerList({ customers }) {
                 </thead>
                 <tbody>
                     {currentCustomers.map((customer, index) => (
-                        <tr key={index}>
-                            <td>{customer.Customer}</td>
-                            <td>{customer.Company}</td>
-                            <td>{customer.StreetAddress}</td>
-                            <td>{customer.City}</td>
-                            <td>{customer.State}</td>
-                            <td>{customer.Country}</td>
-                            <td>{customer.Zip}</td>
-                            <td>{customer.Phone}</td>
-                            <td>{customer.Email}</td>
-                            <td>{customer.CustomerType}</td>
-                            <td>{customer.Notes}</td>
+                        <tr key={customer.id}>
+                            <td>{customer.customer}</td>
+                            <td>{customer.company}</td>
+                            <td>{customer.streetAddress}</td>
+                            <td>{customer.city}</td>
+                            <td>{customer.state}</td>
+                            <td>{customer.country}</td>
+                            <td>{customer.zip}</td>
+                            <td>{customer.phone}</td>
+                            <td>{customer.email}</td>
+                            <td>{customer.customerType}</td>
+                            <td>{customer.notes}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-
             {/* Pagination buttons */}
             <div className="pagination">
-                {Array.from({ length: Math.ceil(customers.length / customersPerPage) }, (_, index) => (
-                    <button key={index} onClick={() => paginate(index + 1)}>
-                        {index + 1}
-                    </button>
-                ))}
+                <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
+                <span>Page {currentPage}</span>
+                <button onClick={nextPage} disabled={currentPage === Math.ceil(customers.length / customersPerPage)}>Next</button>
             </div>
         </div>
     );
