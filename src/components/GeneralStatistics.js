@@ -5,19 +5,19 @@ function GeneralStatistics({ customers }) {
     const totalCustomers = customers.length;
 
     // Calculate number of customers from each country
-    const countryCounts = customers.reduce((acc, customer) => {
-        const country = customer.country;
-        if (!acc[country]) {
-            acc[country] = 1;
+    const cityCounts = customers.reduce((acc, customer) => {
+        const city = customer.city;
+        if (!acc[city]) {
+            acc[city] = 1;
         } else {
-            acc[country]++;
+            acc[city]++;
         }
         return acc;
     }, {});
 
     // Filter out countries with less than 3 customers and sort them in descending order
-    const sortedCountryCounts = Object.entries(countryCounts)
-        .filter(([country, count]) => count >= 3)
+    const sortedCityCounts = Object.entries(cityCounts)
+        .filter(([city, count]) => count >= 3)
         .sort((a, b) => b[1] - a[1]);
 
     return (
@@ -30,11 +30,11 @@ function GeneralStatistics({ customers }) {
             </div>
 
             <div>
-                <h3>Customers by country:</h3>
+                <h3>Customers by City:</h3>
                 <ul>
-                    {sortedCountryCounts.map(([country, count]) => (
-                        <li key={country}>
-                            {country}: {count}
+                    {sortedCityCounts.map(([city, count]) => (
+                        <li key={city}>
+                            {city}: {count}
                         </li>
                     ))}
                 </ul>

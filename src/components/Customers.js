@@ -1,14 +1,15 @@
 // Customers.js
 
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, limit, query } from 'firebase/firestore'; // Import limit and query
 import { db } from '../firebaseConfig';
 import CustomerList from '../components/CustomerList';
 import GeneralStatistics from '../components/GeneralStatistics';
 
 export const getCustomers = async () => {
-  const customersCol = collection(db, 'customers');
-  const customerSnapshot = await getDocs(customersCol);
+  const customersCol = collection(db, 'InvoiceListContactList');
+  const q = query(customersCol, limit(20)); // Limiting to 20
+  const customerSnapshot = await getDocs(q);
   const customerList = customerSnapshot.docs.map(doc => doc.data());
   return customerList;
 };

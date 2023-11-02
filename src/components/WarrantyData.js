@@ -34,7 +34,7 @@ const WarrantyData = () => {
                 {requests.length === 0 ? (
                     <p>No requests found.</p>
                 ) : (
-                    <table>
+                    <table>-
                         <thead>
                             Warranty Data
                             <tr>

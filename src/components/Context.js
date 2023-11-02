@@ -1,7 +1,6 @@
 import React, { useEffect, createContext, useReducer, useState } from 'react';
 import DynamoDBServiceWarranty from '../dbhelpers/dynamoDBServiceWarranty.js'; // adjust this path to your dynamoDBService.js file location
 import DynamoDBServiceMarketing from '../dbhelpers/dynamoDBServiceMarketing.js'; // adjust this path to your dynamoDBService.js file location
-import AWS from 'aws-sdk';
 
 const DataContext = createContext();
 

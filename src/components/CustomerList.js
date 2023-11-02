@@ -1,26 +1,59 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs, query, limit } from 'firebase/firestore'; // Import limit
 import { db } from '../firebaseConfig';
 
 function CustomerList() {
     const [customers, setCustomers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const customersPerPage = 10;
-
+    const customersPerPage = 50;
+    const CACHE_KEY = 'customers_cache';
+    const CACHE_DURATION = 3600000; // 1 hour in milliseconds
+    
     useEffect(() => {
         const fetchData = async () => {
-            const customersCol = collection(db, 'customers');
-            const customerSnapshot = await getDocs(query(customersCol));
+            let cachedData = localStorage.getItem(CACHE_KEY);
+    
+            if (cachedData) {
+                cachedData = JSON.parse(cachedData);
+    
+                const now = Date.now();
+                if (now - cachedData.timestamp < CACHE_DURATION) {
+                    setCustomers(cachedData.data);
+                    return;
+                }
+            }
+    
+            const customersCol = collection(db, 'InvoiceListContactList');
+            const q = query(customersCol, limit(20)); // Limiting to 20
+            const customerSnapshot = await getDocs(q);
             const customerList = customerSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    
             setCustomers(customerList);
+    
+            // Cache the data
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ 
+                data: customerList, 
+                timestamp: Date.now() 
+            }));
         };
-
+    
         fetchData();
     }, []);
+    
 
     const indexOfLastCustomer = currentPage * customersPerPage;
     const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
     const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer);
+
+    const cityCounts = customers.reduce((acc, customer) => {
+        const city = customer.city;
+        if (acc[city]) {
+            acc[city] += 1;
+        } else {
+            acc[city] = 1;
+        }
+        return acc;
+    }, {});
 
     // Pagination functions
     const nextPage = () => {
@@ -39,8 +72,18 @@ function CustomerList() {
         <div>
             {/* Display total number of customers and count per page */}
             <div>
-                <p>Total Customers: {customers.length}</p>
+                <p>Total Customers!!: {customers.length}</p>
                 <p>Displaying: {Math.min(customers.length, customersPerPage)} customers per page</p>
+            </div>
+
+            {/* Display city counts */}
+            <div>
+                <h3>City Counts:</h3>
+                <ul>
+                    {Object.entries(cityCounts).map(([city, count]) => (
+                        <li key={city}>{city}: {count}</li>
+                    ))}
+                </ul>
             </div>
 
             <table>
@@ -65,8 +108,8 @@ function CustomerList() {
                             <td>{customer.customer}</td>
                             <td>{customer.company}</td>
                             <td>{customer.streetAddress}</td>
-                            <td>{customer.city}</td>
                             <td>{customer.state}</td>
+                            <td>{customer.city}</td>
                             <td>{customer.country}</td>
                             <td>{customer.zip}</td>
                             <td>{customer.phone}</td>

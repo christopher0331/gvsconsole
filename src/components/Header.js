@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FirebaseDataUpload from './FirebaseDataUpload.js';
-
+import EmailSender from './SendEmails.js';
+import DisplayCustomers from './DisplayCustomers.js';
 import './styles/Header.css';
 
 const Header = () => {
@@ -17,13 +17,14 @@ const Header = () => {
       </div>
       <nav className={`nav ${menuOpen ? 'open' : ''}`}>
         <ul>
-          {/* <FirebaseDataUpload /> */}
           <Link to="/overview"><li>Overview</li></Link>
           <Link to="/customers"><li>Customers</li></Link>
           <Link to="/financial"><li>Financial</li></Link>
           <Link to="/marketing"><li>Marketing</li></Link>
           <Link to="/projects"><li>Projects</li></Link>
           <Link to="/forms"><li>Forms and Form Data</li></Link>
+          {/* <DisplayCustomers /> */}
+          <EmailSender />
         </ul>
       </nav>
     </div>

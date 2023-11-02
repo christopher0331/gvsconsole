@@ -12,9 +12,10 @@ import Forms from './components/Forms.js';
 import FormsAndFormDataOverview  from "./components/FormsAndFormsDataOverview";
 import AWS from 'aws-sdk';
 import axios from 'axios';
-import MarketingForm from './components/MarketingForm.js'
-;import { DataProvider } from './components/Context.js';
+import MarketingForm from './components/MarketingForm.js';
+import { DataProvider } from './components/Context.js';
 import './App.css';
+import CustomerFilter from './components/FirebaseDataUpload.js';
 
 async function configureAWS() {
   try {
@@ -33,10 +34,12 @@ configureAWS();
 function App() {
   return (
     <DataProvider>
+      {/* <CustomerFilter /> */}
       <Router>
         <div className="App">
           <Header />
           <Routes>
+          
             <Route path="/overview" element={<Overview />} />
             <Route path="/warranty-overview" element={<WarrantyOverview />} />
             <Route path="/Customers" element={<Customers />} />

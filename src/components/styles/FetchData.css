@@ -1,0 +1,56 @@
+/* FetchAndCompute.css */
+
+.fetchAndCompute-container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fetchAndCompute-header {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.fetchAndCompute-data-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.fetchAndCompute-data-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.fetchAndCompute-data-item:last-child {
+    border-bottom: none;
+}
+
+.fetchAndCompute-data-label {
+    font-weight: 500;
+    color: #666;
+}
+
+.fetchAndCompute-data-value {
+    font-weight: 400;
+    color: #333;
+}
+
+.fetchAndCompute-total {
+    margin-top: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #444;
+}
+
+.fetchAndCompute-average {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+}

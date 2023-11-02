@@ -2,10 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 20px 20px;
   background-color: #f8f9fa;
   flex-direction: column;
   position: relative; /* Add this line */
+
 }
 
 .nav {
