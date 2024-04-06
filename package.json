@@ -1,6 +1,7 @@
 {
   "name": "gvsconsole",
   "version": "0.1.0",
+  "proxy": "https://api.emailjs.com",
   "private": true,
   "dependencies": {
     "@react-firebase/firestore": "^0.5.5",

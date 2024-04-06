@@ -72,7 +72,7 @@ function CustomerList() {
         <div>
             {/* Display total number of customers and count per page */}
             <div>
-                <p>Total Customers!!: {customers.length}</p>
+                <p>Total Customers: {customers.length}</p>
                 <p>Displaying: {Math.min(customers.length, customersPerPage)} customers per page</p>
             </div>
 

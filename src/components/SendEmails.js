@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import emailjs from 'emailjs-com';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
@@ -21,8 +21,29 @@ const excludedNames = [
     "Bill Beans",
     "Ted Dankanyin",
     "John Doxsee",
-    "Brandon Barnett"
+    "Brandon Barnett",
+    "Sent to people below",
+    "Zac Brown",
+    "Robert Emmen",
+    "Edward Wood Prince",
+    "Drew Clark",
+    "Rebecca MacNeil",
+    "Ann Nelson",
+    "Renae Hodge",
+    "Joe Rodriguez",
+    "George Carreon",
+    'Amy A',
+    "John Werth",
+    "Julie Thorpe",
+    'Gregg Fink',
+    'Annie H',
+    "Mikaela Mahoney",
+    "Steve Seibold",
+    "Westfield Village Homeowners Assoiciation, Inc",
+    "Erica",
+    "James Dillie"
 ];
+
 
 function EmailSender() {
     const [emailSent, setEmailSent] = useState(false);
@@ -30,101 +51,107 @@ function EmailSender() {
     const [customers, setCustomers] = useState([]);
     const [emailsSentCount, setEmailsSentCount] = useState(0);
     const [sentEmailsList, setSentEmailsList] = useState([]);
-
-    
+    const [isSending, setIsSending] = useState(false);
+    const sendProcessActive = useRef(true);
+  
     useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                const customerSnapshot = await getDocs(collection(db, 'InvoiceListContactInfo'));
-                const customerList = customerSnapshot.docs.map(doc => doc.data());
-                console.log("Fetched customers:", customerList); // <-- Add this line
-                setCustomers(customerList);
-            } catch (error) {
-                console.error("Error fetching customers:", error);
-            }
-        };
-    
-        fetchCustomers();
-    }, []);
-    
-
-    const sendEmails = () => {
-        let count = 0; 
-        let sentEmails = [];
-    
-        const filteredCustomers = customers.filter(customer => {
-            const isExcluded = excludedNames.includes(customer.name);
-            if (isExcluded) {
-                console.log(`Excluding ${customer.name} from email list.`);
-            }
-            return !isExcluded;
-        });
-        const emailPromises = filteredCustomers.map(user => {
-            const emails = user.email.split(','); 
-
-            return emails.map(email => {
-                if (!email) return null;
-        
-                count++;
-        
-                let templateId = "template_0jbfmgr"; 
-                const templateParams = {
-                    to_email: email.trim(),
-                    message: 'Please visit our link and tell us how we did on your project.'
-                };
-        
-                if (user.city === 'Boulder' || citiesNearBoulder.includes(user.city)) {
-                    templateId = "template_j40osx4"; // Boulder Location
-                    console.log(`Sending Boulder email to ${user.name} (${email.trim()}) from city ${user.city}`);
-               
-               
-                } else if (user.city === 'Arvada' || citiesNearArvada.includes(user.city)) {
-                    templateId = "template_0jbfmgr"; // Arvada Location
-                    templateParams.message = 'Your new message for Arvada and nearby cities.';
-                    console.log(`Sending Arvada email to ${user.name} (${email.trim()}) from city ${user.city}`);
-                }
-
-                return emailjs
-                    .send("service_ydn2pci", templateId, templateParams, "user_wPYeoaoebNsoGt3GhzLVu")
-                    .then((response) => {
-                        console.log(`Email successfully sent to ${email.trim()}!`, response);
-                        sentEmails.push({ name: user.name, email: email.trim() });
-                    })
-                    .catch((err) => {
-                        console.error(`Failed to send email to ${email.trim()}:`, err);
-                        setError(err);
-                        return err;
-                    });
-            });
-        });
-
-        Promise.all(emailPromises.flat()).then(() => {
-            alert(`All emails have been sent! Total emails sent: ${count}`);
-            setEmailSent(true);
-            setEmailsSentCount(count);
-            setSentEmailsList(sentEmails);
-        });
-    };
-
-   
-return (
-    <div>
-        <button onClick={sendEmails}>Send Emails</button>
-        {emailSent && <p>Emails successfully sent! Total emails sent: {emailsSentCount}</p>}
-        {emailSent && 
-            <div>
-                <h3>Emails Sent:</h3>
-                {sentEmailsList.map(item => (
-                    <div key={item.email}>
-                        {item.name} - {item.email}
-                    </div>
-                ))}
-                {console.log('Sent Emails : ', sentEmailsList)}
-            </div>
+      const fetchCustomers = async () => {
+        try {
+          const customerSnapshot = await getDocs(collection(db, 'InvoiceListContactInfo'));
+          const customerList = customerSnapshot.docs.map(doc => doc.data());
+          console.log("Fetched customers:", customerList);
+          setCustomers(customerList);
+        } catch (error) {
+          console.error("Error fetching customers:", error);
+          setError(error);
         }
+      };
+  
+      fetchCustomers();
+    }, []);
+  
+    const sendEmailsToAll = async () => {
+      setIsSending(true);
+      sendProcessActive.current = true;
+      let count = 0;
+      let sentEmails = [];
+  
+      // Skip the first 20 customers
+      const customersToEmail = customers.slice(20);
+  
+      for (let user of customersToEmail) {
+        if (!sendProcessActive.current) {
+          console.log("Stopped sending emails.");
+          break;
+        }
+        if (excludedNames.includes(user.name)) {
+          console.log(`Excluding ${user.name} from email list.`);
+          continue;
+        }
+  
+        const emails = user.email.split(',');
+        for (let email of emails) {
+          if (!email) continue;
+  
+          count++;
+          let templateId = "template_0jbfmgr";
+          const templateParams = {
+            to_email: email.trim(),
+            message: 'Please visit our link and tell us how we did on your project.'
+          };
+  
+          if (citiesNearBoulder.includes(user.city)) {
+            templateId = "template_j40osx4"; // Boulder Location
+            console.log(`Sending Boulder email to ${user.name} (${email.trim()}) from city ${user.city}`);
+          } else if (citiesNearArvada.includes(user.city)) {
+            templateId = "template_0jbfmgr"; // Arvada Location
+            templateParams.message = 'Your new message for Arvada and nearby cities.';
+            console.log(`Sending Arvada email to ${user.name} (${email.trim()}) from city ${user.city}`);
+          }
+  
+          try {
+            const response = await emailjs.send("service_ydn2pci", templateId, templateParams, "user_wPYeoaoebNsoGt3GhzLVu");
+            console.log(`Email successfully sent to ${email.trim()}!`, response);
+            sentEmails.push({ name: user.name, email: email.trim() });
+          } catch (err) {
+            console.error(`Failed to send email to ${email.trim()}:`, err);
+            setError(err);
+            // If you want to stop sending emails on the first error, uncomment the line below
+            break;
+          }
+        }
+      }
+  
+      setIsSending(false);
+      setEmailsSentCount(count);
+      setSentEmailsList(sentEmails);
+      setEmailSent(true);
+    };
+  
+    const stopSendingEmails = () => {
+      sendProcessActive.current = false;
+      setIsSending(false);
+    };
+  
+    return (
+      <div>
+        <button onClick={sendEmailsToAll} disabled={isSending}>
+          {isSending ? 'Sending...' : 'Send Emails to All (Skipping First 20)'}
+        </button>
+        {isSending && (
+          <button onClick={stopSendingEmails}>
+            Stop Sending Emails
+          </button>
+        )}
+        {emailSent && <p>Emails successfully sent! Total emails sent: {emailsSentCount}</p>}
+        {emailSent && sentEmailsList.map(item => (
+          <div key={item.email}>
+            {item.name} - {item.email}
+          </div>
+        ))}
         {error && <p>Error sending emails: {error.toString()}</p>}
-    </div>
-);
-}
-
-export default EmailSender;
+      </div>
+    );
+  }
+  
+  export default EmailSender;
