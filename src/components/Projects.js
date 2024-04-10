@@ -8,7 +8,7 @@ const Projects = () => {
     <div>
       Projects content here
       <CurrentProjects />
-      <GoogleCalendarData />!
+      {/* <GoogleCalendarData />! */}
     </div>
   );
 }

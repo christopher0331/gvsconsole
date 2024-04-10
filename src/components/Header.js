@@ -24,7 +24,7 @@ const Header = () => {
           <Link to="/projects"><li>Projects</li></Link>
           <Link to="/forms"><li>Forms and Form Data</li></Link>
           {/* <DisplayCustomers /> */}
-          <EmailSender />
+          {/* <EmailSender /> */}
         </ul>
       </nav>
     </div>
